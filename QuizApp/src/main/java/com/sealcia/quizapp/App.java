@@ -1,6 +1,7 @@
 package com.sealcia.quizapp;
 
 import com.sealcia.utils.JdbcConnector;
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -9,9 +10,6 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-/**
- * JavaFX App
- */
 public class App extends Application {
 
     private static Scene scene;
@@ -29,7 +27,6 @@ public class App extends Application {
         super.stop();
         JdbcConnector.getInstance().close();
     }
-    
 
     static void setRoot(String fxml) throws IOException {
         scene.setRoot(loadFXML(fxml));
@@ -43,5 +40,4 @@ public class App extends Application {
     public static void main(String[] args) {
         launch();
     }
-
 }

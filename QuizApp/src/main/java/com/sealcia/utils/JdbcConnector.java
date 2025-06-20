@@ -5,7 +5,6 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class JdbcConnector {
-
     private static JdbcConnector instance;
     private final Connection connection;
 
@@ -18,7 +17,8 @@ public class JdbcConnector {
     }
 
     private JdbcConnector() throws SQLException {
-        this.connection = DriverManager.getConnection("jdbc:mysql://localhost/quizdb", "root", "root");
+        this.connection =
+            DriverManager.getConnection("jdbc:mysql://localhost/quizdb", "root", "root");
     }
 
     public static JdbcConnector getInstance() throws SQLException {

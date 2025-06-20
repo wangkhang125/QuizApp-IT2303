@@ -1,11 +1,13 @@
 package com.sealcia.quizapp;
 
 import com.sealcia.utils.MyAlert;
-import java.io.IOException;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+
+import java.io.IOException;
 
 public class PrimaryController {
     public void handleQuestionManagement(ActionEvent event) throws IOException {
@@ -15,7 +17,7 @@ public class PrimaryController {
         stage.setTitle("QUIZ APP");
         stage.show();
     }
-    
+
     public void handlePractice(ActionEvent event) {
         MyAlert.getInstance().showMsg("Coming soon...");
     }
