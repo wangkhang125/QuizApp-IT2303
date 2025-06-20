@@ -1,5 +1,4 @@
-* text eol=crlf
-
-*.java text eol=crlf
-*.fxml text eol=crlf
-*.css  text eol=crlf
+* text eol=lf
+*.java text eol=lf
+*.fxml text eol=lf
+*.css  text eol=lf
