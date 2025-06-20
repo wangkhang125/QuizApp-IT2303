@@ -19,7 +19,9 @@ public class CategoryServices {
         ResultSet rs = stm.executeQuery("SELECT * FROM category");
 
         while (rs.next()) {
-            cates.add(new Category(rs.getInt("id"), rs.getString("name")));
+            int id = rs.getInt("id");
+            String name = rs.getString("name");
+            cates.add(new Category(id, name));
         }
         return cates;
     }
