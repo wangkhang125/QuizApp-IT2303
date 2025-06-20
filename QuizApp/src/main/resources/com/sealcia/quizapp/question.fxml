@@ -10,13 +10,13 @@
 <?import javafx.scene.text.Text?>
 
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="524.0" prefWidth="600.0" styleClass="Main" stylesheets="@styles.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.sealcia.quizapp.QuestionController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="429.0" prefWidth="600.0" styleClass="Main" stylesheets="@styles.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.sealcia.quizapp.QuestionController">
    <children>
       <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="Subject" text="QUẢN LÝ CÂU HỎI" />
       <TextArea prefHeight="57.0" prefWidth="580.0" promptText="Nội dung câu hỏi" />
       <HBox prefHeight="45.0" prefWidth="580.0" styleClass="Main">
          <children>
-            <ComboBox prefWidth="150.0" promptText="Danh mục" />
+            <ComboBox fx:id="cbCates" prefWidth="150.0" promptText="Danh mục" />
             <ComboBox prefWidth="150.0" promptText="Mức độ" />
          </children>
       </HBox>
