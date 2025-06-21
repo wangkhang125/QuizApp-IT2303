@@ -4,6 +4,7 @@
 *.factorypath
 *.classpath
 *.settings
+*.idea
 # Log file
 *.log
 
