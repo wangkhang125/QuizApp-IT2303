@@ -1,7 +1,9 @@
 package com.sealcia.quizapp;
 
 import com.sealcia.pojo.Category;
+import com.sealcia.pojo.Level;
 import com.sealcia.services.CategoryServices;
+import com.sealcia.services.LevelServices;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
@@ -12,12 +14,15 @@ import javafx.scene.control.ComboBox;
 
 public class QuestionController implements Initializable {
     @FXML private ComboBox<Category> cbCates;
+    @FXML private ComboBox<Level> cbLevels;
     private CategoryServices categoryServices = new CategoryServices();
+    private LevelServices levelServices = new LevelServices();
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         try {
             cbCates.setItems(FXCollections.observableList(categoryServices.getCategories()));
+            cbLevels.setItems(FXCollections.observableList(levelServices.getLevels()));
         } catch (SQLException e) {
             e.printStackTrace();
         }
