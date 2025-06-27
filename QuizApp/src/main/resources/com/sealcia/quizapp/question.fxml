@@ -19,7 +19,7 @@
             <ComboBox fx:id="cbLevels" prefWidth="150.0" promptText="Mức độ" />
          </children>
       </HBox>
-      <VBox prefHeight="170.0" prefWidth="580.0" styleClass="Main">
+      <VBox fx:id="vbox" prefHeight="170.0" prefWidth="580.0" styleClass="Main">
          <children>
             <HBox prefHeight="43.0" prefWidth="560.0" styleClass="Main">
                <children>
@@ -33,7 +33,7 @@
                   <TextField />
                </children>
             </HBox>
-            <Button mnemonicParsing="false" styleClass="Button" text="Thêm lựa chọn" />
+            <Button mnemonicParsing="false" onAction="#addChoice" styleClass="Button" text="Thêm lựa chọn" />
          </children>
       </VBox>
    </children>
