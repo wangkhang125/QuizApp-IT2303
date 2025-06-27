@@ -1,6 +1,8 @@
 package com.sealcia.utils;
 
 import com.sealcia.quizapp.App;
+import com.sealcia.utils.theme.ThemeFactory;
+import com.sealcia.utils.theme.ThemeManager;
 import java.io.IOException;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -31,6 +33,7 @@ public class MyStage {
             } else {
                 scene.setRoot(new FXMLLoader(App.class.getResource(fxml)).load());
             }
+            ThemeManager.applyTheme(scene);
             this.stage.setScene(scene);
             this.stage.show();
         }
