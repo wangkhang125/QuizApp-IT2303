@@ -24,6 +24,6 @@ public enum Theme {
             ThemeManager.applyTheme(scene);
         }
     };
-    
+
     public abstract void updateTheme(Scene scene);
 }

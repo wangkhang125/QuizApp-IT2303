@@ -20,7 +20,7 @@ public class Question {
         this.level = builder.level;
         this.choices = builder.choices;
     }
-    
+
     public static class Builder {
         private int id;
         private String content;
@@ -35,28 +35,27 @@ public class Question {
             this.category = category;
             this.level = level;
         }
-        
+
         public Builder addHint(String hint) {
             this.hint = hint;
             return this;
         }
-        
+
         public Builder addImage(String image) {
             this.image = image;
             return this;
         }
-        
+
         public Builder addChoice(Choice choice) {
             this.choices.add(choice);
             return this;
         }
-        
+
         public Question build() {
             return new Question(this);
         }
     }
-    
-    
+
     /**
      * @return the id
      */

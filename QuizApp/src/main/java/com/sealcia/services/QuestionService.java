@@ -1,5 +1,3 @@
 package com.sealcia.services;
 
-public class QuestionService {
-    
-}
+public class QuestionService {}

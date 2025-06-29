@@ -5,6 +5,7 @@ import javafx.scene.control.Alert;
 public class MyAlert {
     private static MyAlert instance;
     private final Alert alert;
+
     private MyAlert() {
         alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setHeaderText("QUIZ APP");
