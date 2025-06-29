@@ -1,7 +1,12 @@
 package com.sealcia.pojo;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.List;
 
+@Getter
+@Setter
 public class Question {
     private int id;
     private String content;
@@ -54,89 +59,5 @@ public class Question {
         public Question build() {
             return new Question(this);
         }
-    }
-
-    /**
-     * @return the id
-     */
-    public int getId() {
-        return id;
-    }
-
-    /**
-     * @param id the id to set
-     */
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    /**
-     * @return the content
-     */
-    public String getContent() {
-        return content;
-    }
-
-    /**
-     * @param content the content to set
-     */
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    /**
-     * @return the hint
-     */
-    public String getHint() {
-        return hint;
-    }
-
-    /**
-     * @param hint the hint to set
-     */
-    public void setHint(String hint) {
-        this.hint = hint;
-    }
-
-    /**
-     * @return the image
-     */
-    public String getImage() {
-        return image;
-    }
-
-    /**
-     * @param image the image to set
-     */
-    public void setImage(String image) {
-        this.image = image;
-    }
-
-    /**
-     * @return the category
-     */
-    public Category getCategory() {
-        return category;
-    }
-
-    /**
-     * @param category the category to set
-     */
-    public void setCategory(Category category) {
-        this.category = category;
-    }
-
-    /**
-     * @return the level
-     */
-    public Level getLevel() {
-        return level;
-    }
-
-    /**
-     * @param level the level to set
-     */
-    public void setLevel(Level level) {
-        this.level = level;
     }
 }

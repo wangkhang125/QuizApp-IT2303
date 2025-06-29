@@ -16,7 +16,7 @@ public class LevelServices {
 
         Connection conn = JdbcConnector.getInstance().connect();
         Statement stm = conn.createStatement();
-        ResultSet rs = stm.executeQuery("SELECT * FROM Level");
+        ResultSet rs = stm.executeQuery("SELECT * FROM level");
 
         while (rs.next()) {
             int id = rs.getInt("id");
