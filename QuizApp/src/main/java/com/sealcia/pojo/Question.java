@@ -3,6 +3,7 @@ package com.sealcia.pojo;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -14,7 +15,7 @@ public class Question {
     private String image;
     private Category category;
     private Level level;
-    private List<Choice> choices;
+    private List<Choice> choices = new ArrayList<>();
 
     public Question(Builder builder) {
         this.id = builder.id;
@@ -33,9 +34,12 @@ public class Question {
         private String image;
         private Category category;
         private Level level;
-        private List<Choice> choices;
+        private List<Choice> choices = new ArrayList<>();
 
-        public Builder(String content, Category category, Level level) {
+        public Builder(String content, Category category, Level level) throws Exception {
+            if (content.isEmpty() || category == null || level == null) {
+                throw new Exception("Invalid data");
+            }
             this.content = content;
             this.category = category;
             this.level = level;
@@ -60,4 +64,5 @@ public class Question {
             return new Question(this);
         }
     }
+
 }
