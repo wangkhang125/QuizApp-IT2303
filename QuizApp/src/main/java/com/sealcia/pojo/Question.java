@@ -64,6 +64,11 @@ public class Question {
             this.choices.add(choice);
             return this;
         }
+        
+        public Builder addChoices(List<Choice> choices) {
+            this.choices.addAll(choices);
+            return this;
+        }
 
         public Question build() {
             return new Question(this);

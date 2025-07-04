@@ -6,7 +6,7 @@ import com.sealcia.pojo.Level;
 import com.sealcia.pojo.Question;
 import com.sealcia.services.CategoryServices;
 import com.sealcia.services.LevelServices;
-import com.sealcia.services.QuestionService;
+import com.sealcia.services.QuestionServices;
 import com.sealcia.utils.MyAlert;
 
 import javafx.collections.FXCollections;
@@ -47,7 +47,7 @@ public class QuestionController implements Initializable {
     @FXML private ToggleGroup toggleChoice;
     private static final CategoryServices categoryServices = new CategoryServices();
     private static final LevelServices levelServices = new LevelServices();
-    private static final QuestionService questionService = new QuestionService();
+    private static final QuestionServices questionService = new QuestionServices();
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {

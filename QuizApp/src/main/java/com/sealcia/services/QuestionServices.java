@@ -1,5 +1,6 @@
 package com.sealcia.services;
 
+import com.sealcia.pojo.Choice;
 import com.sealcia.pojo.Question;
 import com.sealcia.utils.JdbcConnector;
 
@@ -11,7 +12,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-public class QuestionService {
+public class QuestionServices {
     public void addQuestion(Question q) throws SQLException {
         Connection conn = JdbcConnector.getInstance().connect();
         conn.setAutoCommit(false);
@@ -79,5 +80,41 @@ public class QuestionService {
         PreparedStatement stm  = connection.prepareCall("DELETE FROM question WHERE id=?");
         stm.setInt(1, questionId);
         return stm.executeUpdate() > 0;
+    }
+    
+    public List<Question> getQuestions(int num) throws SQLException  {
+        Connection connection = JdbcConnector.getInstance().connect();
+        
+        PreparedStatement stm =
+                connection.prepareCall("SELECT * FROM question ORDER BY rand() LIMIT ?");
+        stm.setInt(1, num);
+        ResultSet rs = stm.executeQuery();
+
+        List<Question> questions = new ArrayList<>();
+        while(rs.next()) {
+            int id = rs.getInt("id");
+            String content = rs.getString("content");
+            
+            Question q = new Question.Builder(id, content)
+                    .addChoices(this.getChoicesByQuestionId(id)).build();
+            questions.add(q);
+        }
+        return questions;
+    }
+    
+    public List<Choice> getChoicesByQuestionId(int id) throws SQLException{
+        Connection connection = JdbcConnector.getInstance().connect();
+        
+        PreparedStatement stm =
+                connection.prepareCall("SELECT * FROM choice WHERE question_id=?");
+        stm.setInt(1, id);
+        ResultSet rs = stm.executeQuery();
+
+        List<Choice> choices = new ArrayList<>();
+        while(rs.next()) {
+            choices.add(new Choice(rs.getInt("id"), rs.getString("content"),
+                        rs.getBoolean("is_correct")));
+        }
+        return choices;
     }
 }
