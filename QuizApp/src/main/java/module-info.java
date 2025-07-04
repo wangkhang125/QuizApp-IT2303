@@ -9,4 +9,5 @@ module com.sealcia.quizapp {
             javafx.fxml;
 
     exports com.sealcia.quizapp;
+    exports com.sealcia.pojo;
 }

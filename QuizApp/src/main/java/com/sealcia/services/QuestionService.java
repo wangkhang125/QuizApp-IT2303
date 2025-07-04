@@ -7,6 +7,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 public class QuestionService {
     public void addQuestion(Question q) throws SQLException {
@@ -39,5 +42,35 @@ public class QuestionService {
 
             conn.commit();
         } else conn.rollback();
+    }
+    
+    public List<Question> getQuestions() throws SQLException {
+        Connection connection = JdbcConnector.getInstance().connect();
+        
+        Statement stm = connection.createStatement();
+        ResultSet rs = stm.executeQuery("SELECT * FROM question");
+
+        List<Question> questions = new ArrayList<>();
+        while(rs.next()) {
+            Question q = new Question.Builder(rs.getInt("id"), rs.getString("content")).build();
+            questions.add(q);
+        }
+        return questions;
+    }
+    
+    public List<Question> getQuestions(String kw) throws SQLException {
+        Connection connection = JdbcConnector.getInstance().connect();
+        
+        PreparedStatement stm =
+                connection.prepareCall("SELECT * FROM question WHERE content like concat('%', ?, '%')");
+        stm.setString(1, kw);
+        ResultSet rs = stm.executeQuery();
+
+        List<Question> questions = new ArrayList<>();
+        while(rs.next()) {
+            Question q = new Question.Builder(rs.getInt("id"), rs.getString("content")).build();
+            questions.add(q);
+        }
+        return questions;
     }
 }

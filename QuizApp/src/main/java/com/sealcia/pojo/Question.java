@@ -44,6 +44,11 @@ public class Question {
             this.category = category;
             this.level = level;
         }
+        
+        public Builder(int id, String content) {
+            this.id = id;
+            this.content = content;
+        }
 
         public Builder addHint(String hint) {
             this.hint = hint;

@@ -24,7 +24,12 @@ import javafx.scene.layout.VBox;
 
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.ResourceBundle;
+import java.util.logging.Logger;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 
 public class QuestionController implements Initializable {
     @FXML private ComboBox<Category> cbCates;
@@ -32,6 +37,8 @@ public class QuestionController implements Initializable {
     @FXML private VBox vboxChoices;
     @FXML private Button addBtn;
     @FXML private TextArea txtContent;
+    @FXML private TableView<Question> tbQuestions;
+    @FXML private TextField txtSearch;
 
     @FXML private ToggleGroup toggleChoice;
     private static final CategoryServices categoryServices = new CategoryServices();
@@ -41,11 +48,22 @@ public class QuestionController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         try {
-            cbCates.setItems(FXCollections.observableList(categoryServices.getCategories()));
-            cbLevels.setItems(FXCollections.observableList(levelServices.getLevels()));
+            this.cbCates.setItems(FXCollections.observableList(categoryServices.getCategories()));
+            this.cbLevels.setItems(FXCollections.observableList(levelServices.getLevels()));
+            
+            this.loadColumn();
+            this.loadQuestion(questionService.getQuestions());    
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        
+        this.txtSearch.textProperty().addListener(e -> {
+            try {
+                this.loadQuestion(questionService.getQuestions(this.txtSearch.getText()));
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        });
     }
 
     public void addChoice(ActionEvent event) {
@@ -76,11 +94,28 @@ public class QuestionController implements Initializable {
             }
 
             questionService.addQuestion(builder.build());
+            this.tbQuestions.getItems().add(0, builder.build());
             MyAlert.getInstance().showMsg("Thêm câu hỏi thành công!");
         } catch (SQLException ex) {
             MyAlert.getInstance().showMsg("Thêm câu hỏi thất bại!");
         } catch (Exception ex) {
             MyAlert.getInstance().showMsg("Dữ liệu không hợp lệ!");
         }
+    }
+    
+    private void loadColumn() {
+        TableColumn colId = new TableColumn("Id");
+        colId.setCellValueFactory(new PropertyValueFactory("id"));
+        colId.setPrefWidth(100);
+        
+        TableColumn colContent = new TableColumn("Nội dung câu hỏi");
+        colContent.setCellValueFactory(new PropertyValueFactory("content"));
+        colContent.setPrefWidth(250);
+        
+        this.tbQuestions.getColumns().addAll(colId, colContent);
+    }
+    
+    private void loadQuestion(List<Question> questions) {
+        this.tbQuestions.setItems(FXCollections.observableList(questions));
     }
 }
