@@ -73,4 +73,11 @@ public class QuestionService {
         }
         return questions;
     }
+    
+    public boolean deleteQuestion(int questionId) throws SQLException {
+        Connection connection = JdbcConnector.getInstance().connect();
+        PreparedStatement stm  = connection.prepareCall("DELETE FROM question WHERE id=?");
+        stm.setInt(1, questionId);
+        return stm.executeUpdate() > 0;
+    }
 }

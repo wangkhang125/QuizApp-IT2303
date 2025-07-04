@@ -25,8 +25,12 @@ import javafx.scene.layout.VBox;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -112,7 +116,32 @@ public class QuestionController implements Initializable {
         colContent.setCellValueFactory(new PropertyValueFactory("content"));
         colContent.setPrefWidth(250);
         
-        this.tbQuestions.getColumns().addAll(colId, colContent);
+        TableColumn colAction = new TableColumn();
+        colAction.setCellFactory(e -> {
+            TableCell cell = new TableCell();
+            Button btn = new Button("Xóa");
+            btn.setOnAction(event -> {
+                Optional<ButtonType> t = MyAlert.getInstance().showMsg("Xóa câu hỏi thì các lựa chọn cũng bị xóa theo. Bạn chắc chắn không?",
+                        Alert.AlertType.CONFIRMATION);
+                if (t.isPresent() && t.get().equals(ButtonType.OK)) {
+                    try {
+                        Question q = (Question) cell.getTableRow().getItem();
+                        questionService.deleteQuestion(q.getId());
+                        this.tbQuestions.getItems().remove(q);
+                        MyAlert.getInstance().showMsg("Xóa thành công");
+                    } catch (SQLException ex) {
+                        ex.printStackTrace();
+                        MyAlert.getInstance().showMsg("Xóa thất bại!", Alert.AlertType.WARNING);
+                    }
+                    
+                }
+            });
+            
+            cell.setGraphic(btn);
+            return cell;
+        });
+        
+        this.tbQuestions.getColumns().addAll(colId, colContent, colAction);
     }
     
     private void loadQuestion(List<Question> questions) {
