@@ -4,21 +4,25 @@ import com.sealcia.pojo.Category;
 import com.sealcia.pojo.Choice;
 import com.sealcia.pojo.Level;
 import com.sealcia.pojo.Question;
-import com.sealcia.services.CategoryServices;
-import com.sealcia.services.LevelServices;
-import com.sealcia.services.QuestionServices;
+import com.sealcia.utils.Configs;
 import com.sealcia.utils.MyAlert;
 
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.TableCell;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
@@ -27,13 +31,6 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
-import java.util.logging.Logger;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.TableCell;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
 
 public class QuestionController implements Initializable {
     @FXML private ComboBox<Category> cbCates;
@@ -43,31 +40,30 @@ public class QuestionController implements Initializable {
     @FXML private TextArea txtContent;
     @FXML private TableView<Question> tbQuestions;
     @FXML private TextField txtSearch;
-
     @FXML private ToggleGroup toggleChoice;
-    private static final CategoryServices categoryServices = new CategoryServices();
-    private static final LevelServices levelServices = new LevelServices();
-    private static final QuestionServices questionService = new QuestionServices();
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         try {
-            this.cbCates.setItems(FXCollections.observableList(categoryServices.getCategories()));
-            this.cbLevels.setItems(FXCollections.observableList(levelServices.getLevels()));
-            
+            this.cbCates.setItems(FXCollections.observableList(Configs.categoryServices.getCategories()));
+            this.cbLevels.setItems(FXCollections.observableList(Configs.levelServices.getLevels()));
+
             this.loadColumn();
-            this.loadQuestion(questionService.getQuestions());    
+            this.loadQuestion(Configs.questionService.getQuestions());
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        
-        this.txtSearch.textProperty().addListener(e -> {
-            try {
-                this.loadQuestion(questionService.getQuestions(this.txtSearch.getText()));
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-            }
-        });
+
+        this.txtSearch
+            .textProperty()
+            .addListener(e -> {
+                try {
+                    this.loadQuestion(
+                        Configs.questionService.getQuestions(this.txtSearch.getText()));
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            });
     }
 
     public void addChoice(ActionEvent event) {
@@ -86,8 +82,8 @@ public class QuestionController implements Initializable {
     public void addQuestion(ActionEvent event) {
         try {
             Question.Builder builder = new Question.Builder(this.txtContent.getText(),
-                            this.cbCates.getSelectionModel().getSelectedItem(),
-                            this.cbLevels.getSelectionModel().getSelectedItem());
+                                    this.cbCates.getSelectionModel().getSelectedItem(),
+                                    this.cbLevels.getSelectionModel().getSelectedItem());
 
             for (var c : this.vboxChoices.getChildren()) {
                 HBox h = (HBox) c;
@@ -97,7 +93,7 @@ public class QuestionController implements Initializable {
                 builder.addChoice(choice);
             }
 
-            questionService.addQuestion(builder.build());
+            Configs.questionService.addQuestion(builder.build());
             this.tbQuestions.getItems().add(0, builder.build());
             MyAlert.getInstance().showMsg("Thêm câu hỏi thành công!");
         } catch (SQLException ex) {
@@ -106,44 +102,46 @@ public class QuestionController implements Initializable {
             MyAlert.getInstance().showMsg("Dữ liệu không hợp lệ!");
         }
     }
-    
+
     private void loadColumn() {
         TableColumn colId = new TableColumn("Id");
         colId.setCellValueFactory(new PropertyValueFactory("id"));
         colId.setPrefWidth(100);
-        
+
         TableColumn colContent = new TableColumn("Nội dung câu hỏi");
         colContent.setCellValueFactory(new PropertyValueFactory("content"));
         colContent.setPrefWidth(250);
-        
+
         TableColumn colAction = new TableColumn();
-        colAction.setCellFactory(e -> {
-            TableCell cell = new TableCell();
-            Button btn = new Button("Xóa");
-            btn.setOnAction(event -> {
-                Optional<ButtonType> t = MyAlert.getInstance().showMsg("Xóa câu hỏi thì các lựa chọn cũng bị xóa theo. Bạn chắc chắn không?",
-                        Alert.AlertType.CONFIRMATION);
-                if (t.isPresent() && t.get().equals(ButtonType.OK)) {
-                    try {
-                        Question q = (Question) cell.getTableRow().getItem();
-                        questionService.deleteQuestion(q.getId());
-                        this.tbQuestions.getItems().remove(q);
-                        MyAlert.getInstance().showMsg("Xóa thành công");
-                    } catch (SQLException ex) {
-                        ex.printStackTrace();
-                        MyAlert.getInstance().showMsg("Xóa thất bại!", Alert.AlertType.WARNING);
-                    }
-                    
-                }
-            });
-            
-            cell.setGraphic(btn);
-            return cell;
-        });
-        
+        colAction.setCellFactory(
+            e -> {
+                TableCell cell = new TableCell();
+                Button btn = new Button("Xóa");
+                btn.setOnAction(
+                    event -> {
+                        Optional<ButtonType> t = MyAlert.getInstance().showMsg("Xóa câu hỏi thì các lựa chọn cũng bị xóa theo. Bạn chắc chắn không?",
+                                                Alert.AlertType.CONFIRMATION);
+
+                        if (t.isPresent() && t.get().equals(ButtonType.OK)) {
+                            try {
+                                Question q = (Question) cell.getTableRow().getItem();
+                                Configs.questionService.deleteQuestion(q.getId());
+                                this.tbQuestions.getItems().remove(q);
+                                MyAlert.getInstance().showMsg("Xóa thành công");
+                            } catch (SQLException ex) {
+                                ex.printStackTrace();
+                                MyAlert.getInstance().showMsg("Xóa thất bại!", Alert.AlertType.WARNING);
+                            }
+                        }
+                    });
+
+                cell.setGraphic(btn);
+                return cell;
+                });
+
         this.tbQuestions.getColumns().addAll(colId, colContent, colAction);
     }
-    
+
     private void loadQuestion(List<Question> questions) {
         this.tbQuestions.setItems(FXCollections.observableList(questions));
     }

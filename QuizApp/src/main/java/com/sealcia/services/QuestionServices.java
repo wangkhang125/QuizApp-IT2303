@@ -44,76 +44,72 @@ public class QuestionServices {
             conn.commit();
         } else conn.rollback();
     }
-    
+
     public List<Question> getQuestions() throws SQLException {
         Connection connection = JdbcConnector.getInstance().connect();
-        
+
         Statement stm = connection.createStatement();
         ResultSet rs = stm.executeQuery("SELECT * FROM question");
 
         List<Question> questions = new ArrayList<>();
-        while(rs.next()) {
+        while (rs.next()) {
             Question q = new Question.Builder(rs.getInt("id"), rs.getString("content")).build();
             questions.add(q);
         }
         return questions;
     }
-    
+
     public List<Question> getQuestions(String kw) throws SQLException {
         Connection connection = JdbcConnector.getInstance().connect();
-        
-        PreparedStatement stm =
-                connection.prepareCall("SELECT * FROM question WHERE content like concat('%', ?, '%')");
+        String sql = "SELECT * FROM question WHERE content like concat('%', ?, '%')";
+        PreparedStatement stm = connection.prepareCall(sql);
         stm.setString(1, kw);
         ResultSet rs = stm.executeQuery();
 
         List<Question> questions = new ArrayList<>();
-        while(rs.next()) {
+        while (rs.next()) {
             Question q = new Question.Builder(rs.getInt("id"), rs.getString("content")).build();
             questions.add(q);
         }
         return questions;
     }
-    
+
     public boolean deleteQuestion(int questionId) throws SQLException {
         Connection connection = JdbcConnector.getInstance().connect();
-        PreparedStatement stm  = connection.prepareCall("DELETE FROM question WHERE id=?");
+        PreparedStatement stm = connection.prepareCall("DELETE FROM question WHERE id=?");
         stm.setInt(1, questionId);
         return stm.executeUpdate() > 0;
     }
-    
-    public List<Question> getQuestions(int num) throws SQLException  {
+
+    public List<Question> getQuestions(int num) throws SQLException {
         Connection connection = JdbcConnector.getInstance().connect();
-        
+
         PreparedStatement stm =
                 connection.prepareCall("SELECT * FROM question ORDER BY rand() LIMIT ?");
         stm.setInt(1, num);
         ResultSet rs = stm.executeQuery();
 
         List<Question> questions = new ArrayList<>();
-        while(rs.next()) {
+        while (rs.next()) {
             int id = rs.getInt("id");
             String content = rs.getString("content");
-            
-            Question q = new Question.Builder(id, content)
-                    .addChoices(this.getChoicesByQuestionId(id)).build();
+
+            Question q = new Question.Builder(id, content).addChoices(this.getChoicesByQuestionId(id)).build();
             questions.add(q);
         }
         return questions;
     }
-    
-    public List<Choice> getChoicesByQuestionId(int id) throws SQLException{
+
+    public List<Choice> getChoicesByQuestionId(int id) throws SQLException {
         Connection connection = JdbcConnector.getInstance().connect();
-        
-        PreparedStatement stm =
-                connection.prepareCall("SELECT * FROM choice WHERE question_id=?");
+
+        PreparedStatement stm = connection.prepareCall("SELECT * FROM choice WHERE question_id=?");
         stm.setInt(1, id);
         ResultSet rs = stm.executeQuery();
 
         List<Choice> choices = new ArrayList<>();
-        while(rs.next()) {
-            choices.add(new Choice(rs.getInt("id"), rs.getString("content"),
-                        rs.getBoolean("is_correct")));
+        while (rs.next()) {
+            choices.add(new Choice(rs.getInt("id"), rs.getString("content"), rs.getBoolean("is_correct")));
         }
         return choices;
     }

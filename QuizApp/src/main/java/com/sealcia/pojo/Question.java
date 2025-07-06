@@ -44,7 +44,7 @@ public class Question {
             this.category = category;
             this.level = level;
         }
-        
+
         public Builder(int id, String content) {
             this.id = id;
             this.content = content;
@@ -64,7 +64,7 @@ public class Question {
             this.choices.add(choice);
             return this;
         }
-        
+
         public Builder addChoices(List<Choice> choices) {
             this.choices.addAll(choices);
             return this;
@@ -74,5 +74,4 @@ public class Question {
             return new Question(this);
         }
     }
-
 }
