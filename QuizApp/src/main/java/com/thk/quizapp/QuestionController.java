@@ -41,7 +41,7 @@ public class QuestionController implements Initializable {
     @FXML private TableView<Question> tbQuestions;
     @FXML private TextField txtSearch;
     @FXML private ToggleGroup toggleChoice;
-
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         try {

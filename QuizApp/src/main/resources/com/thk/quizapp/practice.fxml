@@ -6,20 +6,23 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="532.0" prefWidth="600.0" styleClass="Main" stylesheets="@styles.css" xmlns="http://javafx.com/javafx/24" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.thk.quizapp.PracticeController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="532.0" prefWidth="600.0" styleClass="Main" stylesheets="@styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.thk.quizapp.PracticeController">
    <children>
       <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="Subject" text="LUYỆN TẬP" />
       <HBox prefHeight="38.0" prefWidth="580.0" styleClass="Main">
          <children>
-            <TextField />
-            <Button mnemonicParsing="false" text="Bắt đầu" />
+            <TextField fx:id="txtQuestionAmount" />
+            <Button mnemonicParsing="false" onAction="#handleStart" text="Bắt đầu" />
          </children>
       </HBox>
-      <VBox fx:id="vboxQuestions" prefHeight="353.0" prefWidth="580.0" styleClass="Main">
+      <Text fx:id="txtQuestionContent" strokeType="OUTSIDE" strokeWidth="0.0" />
+      <VBox fx:id="vboxQuestions" prefHeight="166.0" prefWidth="579.0" styleClass="Main" />
+      <Text fx:id="txtQuestionResult" strokeType="OUTSIDE" strokeWidth="0.0" />
+      <HBox prefHeight="100.0" prefWidth="200.0" styleClass="Main">
          <children>
-            <Text fx:id="txtQuetionContent" strokeType="OUTSIDE" strokeWidth="0.0" text="..." />
+            <Button mnemonicParsing="false" onAction="#handleCheck" styleClass="Button" text="Kiểm tra kết quả" />
+            <Button mnemonicParsing="false" onAction="#handleNext" styleClass="Button" text="Câu tiếp theo &gt;&gt;" />
          </children>
-      </VBox>
-      <Button mnemonicParsing="false" text="CHECK" />
+      </HBox>
    </children>
 </VBox>
