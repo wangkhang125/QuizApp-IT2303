@@ -1,7 +1,12 @@
 package com.thk.quizapp;
 
+import com.thk.pojo.Category;
+import com.thk.pojo.Level;
 import com.thk.pojo.Question;
-import com.thk.services.QuestionServices;
+import com.thk.services.questions.BaseQuestionServices;
+import com.thk.services.questions.CategoryQuestionServicesDecorator;
+import com.thk.services.questions.LevelQuestionServicesDecorator;
+import com.thk.services.questions.LimitQuestionServicesDecorator;
 import com.thk.utils.Configs;
 
 import javafx.fxml.FXML;
@@ -15,7 +20,9 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.ResourceBundle;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 
 public class PracticeController implements Initializable {
@@ -23,18 +30,38 @@ public class PracticeController implements Initializable {
     @FXML private Text txtQuestionContent;
     @FXML private Text txtQuestionResult;
     @FXML private TextField txtQuestionAmount;
+    @FXML private ComboBox<Category> cbPracticeCates;
+    @FXML private ComboBox<Level> cbPracticeLevels;
 
     private List<Question> questions;
     private int currentQuestion = 0;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
+        try {
+            this.cbPracticeCates.setItems(FXCollections.observableList(Configs.categoryServices.getCategories()));
+            this.cbPracticeLevels.setItems(FXCollections.observableList(Configs.levelServices.getLevels()));
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
     
     public void handleStart(ActionEvent ev){
         try {
-            this.questions = Configs.questionService.getQuestions(Integer.parseInt(this.txtQuestionAmount.getText()));
+            
+            BaseQuestionServices bqs = Configs.questionServices;
+            
+            Category cate = this.cbPracticeCates.getSelectionModel().getSelectedItem();
+            if (cate != null)
+                bqs = new CategoryQuestionServicesDecorator(bqs, cate);
+            
+            Level lvl = this.cbPracticeLevels.getSelectionModel().getSelectedItem();
+            if (lvl != null)
+                bqs = new LevelQuestionServicesDecorator(bqs, lvl);
+            
+            bqs = new LimitQuestionServicesDecorator(bqs, Integer.parseInt(this.txtQuestionAmount.getText()));
+            this.questions = bqs.list();
             this.loadPracticeQuestion();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -56,7 +83,7 @@ public class PracticeController implements Initializable {
                 RadioButton rdo = (RadioButton) this.vboxQuestions.getChildren().get(i);
                 this.txtQuestionResult.getStyleClass().clear();
                 if (rdo.isSelected()){
-                    this.txtQuestionResult.setText("Congtatulation! You are correct!");
+                    this.txtQuestionResult.setText("Congratulation! You are correct!");
                     this.txtQuestionResult.getStyleClass().add("Correct");
                 } else{
                     this.txtQuestionResult.setText("Sorry! You are wrong!");
