@@ -4,6 +4,7 @@ import com.thk.pojo.Category;
 import com.thk.pojo.Choice;
 import com.thk.pojo.Level;
 import com.thk.pojo.Question;
+import com.thk.services.FlyweightFactory;
 import com.thk.services.questions.BaseQuestionServices;
 import com.thk.services.questions.CategoryQuestionServicesDecorator;
 import com.thk.services.questions.KeywordQuestionServicesDecorator;
@@ -51,10 +52,11 @@ public class QuestionController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         try {
-            this.cbCates.setItems(FXCollections.observableList(Configs.categoryServices.list()));
-            this.cbSearchCates.setItems(FXCollections.observableList(Configs.categoryServices.list()));
-            this.cbLevels.setItems(FXCollections.observableList(Configs.levelServices.getLevels()));
-            this.cbSearchLevels.setItems(FXCollections.observableList(Configs.levelServices.getLevels()));
+            this.cbCates.setItems(FXCollections.observableList(FlyweightFactory.getData(Configs.categoryServices, "categories")));
+            this.cbSearchCates.setItems(FXCollections.observableList(FlyweightFactory.getData(Configs.categoryServices, "categories")));
+            
+            this.cbLevels.setItems(FXCollections.observableList(FlyweightFactory.getData(Configs.levelServices, "levels")));
+            this.cbSearchLevels.setItems(FXCollections.observableList(FlyweightFactory.getData(Configs.levelServices, "levels")));
 
             this.loadColumn();
             this.loadQuestion(Configs.questionServices.list());

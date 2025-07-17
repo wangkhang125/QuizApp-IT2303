@@ -3,6 +3,7 @@ package com.thk.quizapp;
 import com.thk.pojo.Category;
 import com.thk.pojo.Level;
 import com.thk.pojo.Question;
+import com.thk.services.FlyweightFactory;
 import com.thk.services.questions.BaseQuestionServices;
 import com.thk.services.questions.CategoryQuestionServicesDecorator;
 import com.thk.services.questions.LevelQuestionServicesDecorator;
@@ -39,8 +40,8 @@ public class PracticeController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         try {
-            this.cbPracticeCates.setItems(FXCollections.observableList(Configs.categoryServices.getCategories()));
-            this.cbPracticeLevels.setItems(FXCollections.observableList(Configs.levelServices.getLevels()));
+            this.cbPracticeCates.setItems(FXCollections.observableList(FlyweightFactory.getData(Configs.categoryServices, "categories")));
+            this.cbPracticeLevels.setItems(FXCollections.observableList(FlyweightFactory.getData(Configs.levelServices, "levels")));
 
         } catch (SQLException e) {
             e.printStackTrace();

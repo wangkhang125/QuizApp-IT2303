@@ -6,6 +6,7 @@ package com.thk.services.questions;
 
 import com.thk.pojo.Choice;
 import com.thk.pojo.Question;
+import com.thk.services.BaseServices;
 import com.thk.utils.JdbcConnector;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -19,19 +20,12 @@ import java.util.List;
  *
  * @author admin
  */
-public abstract class BaseQuestionServices {
-    public abstract String getSQL(List<Object> params);
-    
-    public List<Question> list() throws SQLException{
-        Connection conn = JdbcConnector.getInstance().connect();
-        
-        List<Object> params = new ArrayList<>();
-        PreparedStatement pStm = conn.prepareCall(this.getSQL(params));
-        for (int i = 0; i < params.size(); i++)
-            pStm.setObject(i+1, params.get(i));
-        
-        ResultSet rs = pStm.executeQuery();
+public abstract class BaseQuestionServices extends BaseServices<Question> {
 
+    public abstract String getSQL(List<Object> params);
+
+    @Override
+    public List<Question> getResults(ResultSet rs) throws SQLException {
         List<Question> questions = new ArrayList<>();
         while (rs.next()) {
             Question q = new Question.Builder(rs.getInt("id"), rs.getString("content")).build();
@@ -39,8 +33,18 @@ public abstract class BaseQuestionServices {
         }
         return questions;
     }
+
+    @Override
+    public PreparedStatement getStatements(Connection conn) throws SQLException {
+        List<Object> params = new ArrayList<>();
+        PreparedStatement pStm = conn.prepareCall(this.getSQL(params));
+        for (int i = 0; i < params.size(); i++) {
+            pStm.setObject(i + 1, params.get(i));
+        }
+        return pStm;
+    }
     
-        public List<Choice> getChoicesByQuestionId(int id) throws SQLException {
+    public List<Choice> getChoicesByQuestionId(int id) throws SQLException {
         Connection connection = JdbcConnector.getInstance().connect();
 
         PreparedStatement pStm = connection.prepareCall("SELECT * FROM choice WHERE question_id=?");

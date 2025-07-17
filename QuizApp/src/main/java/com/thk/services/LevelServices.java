@@ -12,23 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LevelServices extends BaseServices<Level> {
-    public List<Level> getLevels() throws SQLException {
-        
-
-        Connection conn = JdbcConnector.getInstance().connect();
-        Statement stm = conn.createStatement();
-        ResultSet rs = stm.executeQuery();
-
-        List<Level> levels = new ArrayList<>();
-        while (rs.next()) {
-            int id = rs.getInt("id");
-            String name = rs.getString("name");
-            String note = rs.getString("note");
-            levels.add(new Level(id, name, note));
-        }
-        return levels;
-    }
-
     @Override
     public PreparedStatement getStatements(Connection conn) throws SQLException {
         return conn.prepareCall("SELECT * FROM level");
