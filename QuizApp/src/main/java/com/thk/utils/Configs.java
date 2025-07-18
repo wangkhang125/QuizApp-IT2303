@@ -11,4 +11,7 @@ public class Configs {
     public static final CategoryServices categoryServices = new CategoryServices();
     public static final BaseQuestionServices questionServices = new QuestionServices();
     public static final UpdateQuestionServices updateQuestionServices = new UpdateQuestionServices();
+    
+    public static final int FIXED_QUESTION_AMOUNT = 10;
+    public static final double[] SPECIFIC_QUESTION_RATES = {0.4, 0.4, 0.2};
 }

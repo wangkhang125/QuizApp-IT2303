@@ -25,6 +25,10 @@ public class PrimaryController implements Initializable {
         MyStage.getInstance().showStage("practice.fxml");
     }
     
+    public void handleExam(ActionEvent event) throws IOException {
+        MyStage.getInstance().showStage("exam.fxml");
+    }
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         this.cbThemes.setItems(FXCollections.observableArrayList(Theme.values()));
