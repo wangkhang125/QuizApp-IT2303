@@ -25,7 +25,7 @@ public abstract class ExamStrategy {
         conn.setAutoCommit(false);
         Exam exm = new Exam(questions);
         
-        String sql = "INSERT INTO exam(tittle, created_date) VALUES(?, ?)";
+        String sql = "INSERT INTO exam(title, created_date) VALUES(?, ?)";
         PreparedStatement pStm = conn.prepareCall(sql);
         pStm.setString(1, exm.getTittle());
         pStm.setString(2, exm.getCreatedDate().toString());

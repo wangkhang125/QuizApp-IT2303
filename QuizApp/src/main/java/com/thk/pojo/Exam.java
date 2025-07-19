@@ -13,12 +13,12 @@ import java.util.List;
  */
 public class Exam {
     private int id;
-    private String tittle;
+    private String title;
     private LocalDateTime createdDate;
     private List<Question> questions;
 
     public Exam(List<Question> questions) {
-        this.tittle = String.format("Exam-%s", LocalDateTime.now().toString());
+        this.title = String.format("Exam-%s", LocalDateTime.now().toString());
         this.createdDate = LocalDateTime.now();
         this.questions = questions;
     }
@@ -43,14 +43,14 @@ public class Exam {
      * @return the tittle
      */
     public String getTittle() {
-        return tittle;
+        return title;
     }
 
     /**
      * @param tittle the tittle to set
      */
     public void setTittle(String tittle) {
-        this.tittle = tittle;
+        this.title = tittle;
     }
 
     /**
